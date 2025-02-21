@@ -2,8 +2,11 @@ import "./App.css";
 import { Button } from "./components/ui/button";
 
 function App() {
+    //this is how we will use env vars in Vite
+    const appTitle = import.meta.env.VITE_APP_TITLE || "Default Title";
+
     const clicked = () => {
-        alert("'clicked'");
+        alert(`Welcome to ${appTitle}`);
     };
     return (
         <>
