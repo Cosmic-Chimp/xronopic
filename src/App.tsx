@@ -1,21 +1,47 @@
 import "./App.css";
-import { Button } from "./components/ui/button";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+// @ts-ignore
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+// Example: If you store Navbar here
+import { Navbar } from "./components/xronopic/ui/Navbar";
+
+// Pages (you’ll need to create these)
+import Home from "./pages/Home";
+import Auth from "./pages/Auth";
+import About from "./pages/About";
+import Pricing from "./pages/Pricing";
+import TimelinesList from "./pages/TimelinesList";
+import CreateTimeline from "./pages/CreateTimeline";
+import ViewTimeline from "./pages/ViewTimeline";
+import EditTimeline from "./pages/EditTimeline";
+import NotFound from "./pages/NotFound";
+
+const queryClient = new QueryClient();
 
 function App() {
-    //this is how we will use env vars in Vite
-    const appTitle = import.meta.env.VITE_APP_TITLE || "Default Title";
-
-    const clicked = () => {
-        alert(`Welcome to ${appTitle}`);
-    };
     return (
-        <>
-            <div className="flex justify-center items-center min-h-screen bg-gray-100">
-                <h1 className="text-5xl font-bold text-blue-300">
-                    <Button onClick={clicked}>Hallo, World!</Button>
-                </h1>
-            </div>
-        </>
+        <QueryClientProvider client={queryClient}>
+            {/* <BrowserRouter> */}
+            <Navbar />
+            <Routes>
+                {/* Public pages */}
+                <Route path="/" element={<Home />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/pricing" element={<Pricing />} />
+
+                {/* Timelines (only show if user is logged in, or handle that inside each page) */}
+                <Route path="/timelines" element={<TimelinesList />} />
+                <Route path="/timelines/new" element={<CreateTimeline />} />
+                <Route path="/timelines/:id" element={<ViewTimeline />} />
+                <Route path="/timelines/:id/edit" element={<EditTimeline />} />
+
+                {/* Catch-all for 404 */}
+                <Route path="*" element={<NotFound />} />
+            </Routes>
+            {/* </BrowserRouter> */}
+        </QueryClientProvider>
     );
 }
 
