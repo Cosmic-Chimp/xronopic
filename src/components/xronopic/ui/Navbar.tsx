@@ -81,7 +81,7 @@ export function Navbar() {
             return (
                 <Button
                     asChild
-                    variant="primary"
+                    variant="default"
                     className="bg-blue-500 text-white hover:bg-blue-600"
                 >
                     <Link to="/auth">Sign In</Link>
