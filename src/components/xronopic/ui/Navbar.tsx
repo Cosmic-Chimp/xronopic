@@ -209,7 +209,7 @@ export function Navbar() {
     // Desktop navbar component
     const DesktopNavbar = () => {
         return (
-            <nav className="flex items-center justify-between w-full border-b bg-white">
+            <nav className="flex items-center justify-between w-full border-b bg-white px-[10%]">
                 {/* Left side: Logo */}
                 <div className="bg-gray-200 h-16 w-16 flex items-center justify-center">
                     <span className="text-sm font-medium">Logo</span>
