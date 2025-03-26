@@ -19,7 +19,7 @@ import { Menu, X, User } from "lucide-react";
 import { useMediaQuery } from "../hooks/use-media-query";
 // TODO: refactor this entire damn component, its so ugly, separate the mobile and desktop for example
 export function Navbar() {
-    const isLoggedIn = true; // TODO: get from context/store currently hardcoded everywhere
+    const isLoggedIn = false; // TODO: get from context/store currently hardcoded everywhere
 
     const location = useLocation();
     const isDesktop = useMediaQuery("(min-width: 1024px)");

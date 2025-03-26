@@ -1,78 +1,37 @@
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 import { Link, Navigate } from "react-router-dom";
 import { TimelineCard } from "@/components/xronopic/ui/TimelineCard";
 
+//TODO: create this interface please
+// interface ITimeline {
+//     id
+//     timelineTitle
+
+// }
+
 function TimelinesList() {
-    const isLoggedIn = true; // TODO: get from context/store currently hardcoded everytwher
-    if (!isLoggedIn) {
+    const isAuthenticated = useSelector(
+        (state: RootState) => state.auth.isAuthenticated
+    );
+    const user = useSelector((state: RootState) => state.auth.user);
+    const [timelines, setTimelines] = useState([]);
+
+    useEffect(() => {
+        if (user && user.id) {
+            fetch(`http://localhost:5127/api/timelines/me`)
+                .then((response) => response.json())
+                .then((data) => setTimelines(data))
+                .catch((error) =>
+                    console.error("Error fetching timelines:", error)
+                );
+        }
+    }, [user]);
+
+    if (!isAuthenticated) {
         return <Navigate to="/auth" />;
     }
-
-    // defining the strucutre of our data, this will obviously be fetched from our data source NOT hardcoded like this
-    const timelines = [
-        {
-            id: 1,
-            timelineTitle: "Road Trip",
-            timelineDescription: "Cross-country adventure with friends",
-            events: [
-                {
-                    eventTitle: "Starting Point",
-                    eventDescription: "Leaving from our hometown",
-                    eventDate: "2025-06-01",
-                    imgUrl: "https://via.placeholder.com/150/1", // placeholder image
-                },
-                {
-                    eventTitle: "First Stop",
-                    eventDescription: "Visiting the Grand Canyon",
-                    eventDate: "2025-06-03",
-                    imgUrl: "https://via.placeholder.com/150/2",
-                },
-            ],
-        },
-        {
-            id: 2,
-            timelineTitle: "Project Plan",
-            timelineDescription: "Milestones for our software project",
-            events: [
-                {
-                    eventTitle: "Kickoff",
-                    eventDescription: "Initial meeting with stakeholders",
-                    eventDate: "2025-04-10",
-                },
-                {
-                    eventTitle: "Design Phase",
-                    eventDescription: "Create wireframes and mockups",
-                    eventDate: "2025-04-15",
-                },
-                {
-                    eventTitle: "Development Start",
-                    eventDescription: "Implement core features",
-                    eventDate: "2025-05-01",
-                },
-            ],
-        },
-        {
-            id: 3,
-            timelineTitle: "Personal Goals",
-            timelineDescription: "Tracking my fitness and reading goals",
-            events: [
-                {
-                    eventTitle: "Gym Membership",
-                    eventDescription: "Signed up at local gym",
-                    eventDate: "2025-01-02",
-                },
-                {
-                    eventTitle: "Marathon Training",
-                    eventDescription: "Begin 16-week marathon training plan",
-                    eventDate: "2025-02-01",
-                },
-                {
-                    eventTitle: "Reading Challenge",
-                    eventDescription: "Aiming to read 20 books this year",
-                    eventDate: "2025-01-10",
-                },
-            ],
-        },
-    ];
 
     return (
         <div className="mx-auto max-w-7xl px-4 py-8">
@@ -89,7 +48,7 @@ function TimelinesList() {
 
             {/* Timeline card grid */}
             <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {timelines.map((timeline) => (
+                {timelines.map((timeline: any) => (
                     <TimelineCard
                         key={timeline.id}
                         id={timeline.id}

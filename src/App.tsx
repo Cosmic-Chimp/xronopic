@@ -16,6 +16,7 @@ import CreateTimeline from "./pages/CreateTimeline";
 import ViewTimeline from "./pages/ViewTimeline";
 import EditTimeline from "./pages/EditTimeline";
 import NotFound from "./pages/NotFound";
+import PrivateRoute from "./components/PrivateRoute";
 
 const queryClient = new QueryClient();
 
@@ -32,12 +33,41 @@ function App() {
                 <Route path="/pricing" element={<Pricing />} />
 
                 {/* Timelines (only show if user is logged in, or handle that inside each page) */}
-                <Route path="/timelines" element={<TimelinesList />} />
-                <Route path="/timelines/new" element={<CreateTimeline />} />
-                <Route path="/timelines/:id" element={<ViewTimeline />} />
-                <Route path="/timelines/:id/edit" element={<EditTimeline />} />
+                <Route
+                    path="/timelines"
+                    element={
+                        <PrivateRoute>
+                            <TimelinesList />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/timelines/new"
+                    element={
+                        <PrivateRoute>
+                            <CreateTimeline />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/timelines/:id"
+                    element={
+                        <PrivateRoute>
+                            <ViewTimeline />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/timelines/:id/edit"
+                    element={
+                        <PrivateRoute>
+                            <EditTimeline />
+                        </PrivateRoute>
+                    }
+                />
 
                 {/* Catch-all for 404 */}
+
                 <Route path="*" element={<NotFound />} />
             </Routes>
             {/* </BrowserRouter> */}
