@@ -17,10 +17,15 @@ import {
 import { cn } from "@/lib/utils";
 import { Menu, X, User } from "lucide-react";
 import { useMediaQuery } from "../hooks/use-media-query";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 // TODO: refactor this entire damn component, its so ugly, separate the mobile and desktop for example
 export function Navbar() {
-    const isLoggedIn = false; // TODO: get from context/store currently hardcoded everywhere
-
+    // const isAuthenticated = false; // TODO: get from context/store currently hardcoded everywhere
+    const isAuthenticated = useSelector(
+        (state: RootState) => state.auth.isAuthenticated
+    );
+    const user = useSelector((state: RootState) => state.auth.user);
     const location = useLocation();
     const isDesktop = useMediaQuery("(min-width: 1024px)");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,7 +46,7 @@ export function Navbar() {
     };
 
     const AccountSection = () => {
-        if (isLoggedIn) {
+        if (isAuthenticated) {
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -166,7 +171,7 @@ export function Navbar() {
                                 </Link>
                             </li>
                             <li className="pt-4 border-t">
-                                {isLoggedIn ? (
+                                {isAuthenticated ? (
                                     <>
                                         <Link
                                             to="/profile"
