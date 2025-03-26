@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import {
     loginStart,
@@ -30,8 +30,9 @@ function Auth() {
         if (isLogin) {
             dispatch(loginStart());
             try {
-                const data = await login(formData);
-                dispatch(loginSuccess(data));
+                const token = await login(formData); // Get the token
+                dispatch(loginSuccess(token)); // Dispatch the token
+                localStorage.setItem("token", token); //store token in localstorage
                 navigate("/timelines");
             } catch (error: any) {
                 dispatch(loginFailure(error.message));
@@ -39,8 +40,9 @@ function Auth() {
         } else {
             dispatch(signupStart());
             try {
-                const data = await signup(formData);
-                dispatch(signupSuccess(data));
+                const token = await signup(formData); // Get the token
+                dispatch(signupSuccess(token)); // Dispatch the token
+                localStorage.setItem("token", token); //store token in localstorage
                 navigate("/timelines");
             } catch (error: any) {
                 dispatch(signupFailure(error.message));
@@ -52,12 +54,14 @@ function Auth() {
         <div>
             <h2>{isLogin ? "Sign In" : "Sign Up"}</h2>
             <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    name="username"
-                    placeholder="Username"
-                    onChange={handleChange}
-                />
+                {!isLogin && (
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Username"
+                        onChange={handleChange}
+                    />
+                )}
                 <input
                     type="email"
                     name="email"

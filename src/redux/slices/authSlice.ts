@@ -1,15 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface User {
-    id: number;
-    username: string;
-    email: string;
-    //more later
-}
-
 interface AuthState {
     isAuthenticated: boolean;
-    user: User | null;
     token: string | null;
     loading: boolean;
     error: string | null;
@@ -17,7 +9,6 @@ interface AuthState {
 
 const initialState: AuthState = {
     isAuthenticated: false,
-    user: null,
     token: null,
     loading: false,
     error: null,
@@ -31,13 +22,10 @@ const authSlice = createSlice({
             state.loading = true;
             state.error = null;
         },
-        loginSuccess: (
-            state,
-            action: PayloadAction<{ user: User; token: string }>
-        ) => {
+        loginSuccess: (state, action: PayloadAction<string>) => {
+            // Changed payload type
             state.isAuthenticated = true;
-            state.user = action.payload.user;
-            state.token = action.payload.token;
+            state.token = action.payload;
             state.loading = false;
         },
         loginFailure: (state, action: PayloadAction<string>) => {
@@ -46,20 +34,16 @@ const authSlice = createSlice({
         },
         logout: (state) => {
             state.isAuthenticated = false;
-            state.user = null;
             state.token = null;
         },
         signupStart: (state) => {
             state.loading = true;
             state.error = null;
         },
-        signupSuccess: (
-            state,
-            action: PayloadAction<{ user: User; token: string }>
-        ) => {
+        signupSuccess: (state, action: PayloadAction<string>) => {
+            // Changed payload type
             state.isAuthenticated = true;
-            state.user = action.payload.user;
-            state.token = action.payload.token;
+            state.token = action.payload;
             state.loading = false;
         },
         signupFailure: (state, action: PayloadAction<string>) => {
