@@ -16,18 +16,36 @@ function TimelinesList() {
         (state: RootState) => state.auth.isAuthenticated
     );
     const user = useSelector((state: RootState) => state.auth.user);
+    const token = useSelector((state: RootState) => state.auth.token); // Get the token
     const [timelines, setTimelines] = useState([]);
 
+    console.log("User:", user);
+
     useEffect(() => {
-        if (user && user.id) {
-            fetch(`http://localhost:5127/api/timelines/me`)
-                .then((response) => response.json())
+        if (user && user.id && token) {
+            // Check for token
+            // console.log(`Fetching timelines for user ID: ${user.id}`);
+            fetch(`http://localhost:5127/api/timelines/me`, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Add the header
+                },
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(
+                            `HTTP error! status: ${response.status}`
+                        );
+                    }
+                    return response.json();
+                })
                 .then((data) => setTimelines(data))
                 .catch((error) =>
                     console.error("Error fetching timelines:", error)
                 );
+        } else {
+            console.log("User object is undefined or missing ID or Token.");
         }
-    }, [user]);
+    }, [user, token]); // Add token to dependency array
 
     if (!isAuthenticated) {
         return <Navigate to="/auth" />;
