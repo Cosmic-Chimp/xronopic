@@ -17,18 +17,25 @@ import {
 import { cn } from "@/lib/utils";
 import { Menu, X, User } from "lucide-react";
 import { useMediaQuery } from "../hooks/use-media-query";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
+import { logout } from "@/redux/slices/authSlice";
 // TODO: refactor this entire damn component, its so ugly, separate the mobile and desktop for example
 export function Navbar() {
-    // const isAuthenticated = false; // TODO: get from context/store currently hardcoded everywhere
     const isAuthenticated = useSelector(
         (state: RootState) => state.auth.isAuthenticated
     );
-    const user = useSelector((state: RootState) => state.auth.user);
+    // not using this right now but might?
+    // const user = useSelector((state: RootState) => state.auth.user);
     const location = useLocation();
     const isDesktop = useMediaQuery("(min-width: 1024px)");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const dispatch = useDispatch(); // Get the dispatch function
+
+    const handleLogout = () => {
+        dispatch(logout());
+        // redirect user maybe?
+    };
 
     // Function to determine if a link is active
     const isActive = (path: string) => {
@@ -76,7 +83,10 @@ export function Navbar() {
                                 Settings
                             </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="text-red-500 cursor-pointer">
+                        <DropdownMenuItem
+                            className="text-red-500 cursor-pointer"
+                            onClick={handleLogout}
+                        >
                             Logout
                         </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -189,7 +199,10 @@ export function Navbar() {
                                         </Link>
                                         <button
                                             className="block py-2 text-red-500 w-full text-left"
-                                            onClick={() => setIsMenuOpen(false)}
+                                            onClick={() => {
+                                                setIsMenuOpen(false);
+                                                handleLogout();
+                                            }}
                                         >
                                             Logout
                                         </button>
